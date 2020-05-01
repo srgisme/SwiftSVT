@@ -23,13 +23,14 @@ final class SwiftSVTTests: XCTestCase {
                 expectation.fulfill()
             }
 
-        let transactionSequence = CounterStateTransaction.increase
-            .then(CounterStateTransaction.decrease)
-            .then(AuthStateTransaction(authStatus: .authenticated("ABC123")))
-            .then(CounterStateTransaction.decrease)
-            .then(AuthStateTransaction(authStatus: .unauthenticated))
-            .then(CounterStateTransaction.increase)
-        store.send(transactionSequence)
+        let stateChangeSequence = CounterStateChange.increase
+            .append(CounterStateChange.decrease)
+            .append(AuthStateChange.login(token: "ABC123"))
+            .append(CounterStateChange.decrease)
+            .append(AuthStateChange.logout)
+            .append(CounterStateChange.increase)
+            .eraseToAnyPublisher()
+        store.send(stateChangeSequence)
         wait(for: [expectation], timeout: 45)
     }
 

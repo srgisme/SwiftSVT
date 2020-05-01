@@ -9,16 +9,16 @@ import Combine
 import Foundation
 import SwiftSVT
 
-struct AppState: StateType, Equatable {
+struct AppState: Equatable {
     var counterState = CounterState()
     var authenticationState = AuthenticationState.unauthenticated
 }
 
-struct CounterState: StateType, Equatable {
+struct CounterState: Equatable {
     var counter = 0
 }
 
-enum AuthenticationState: StateType, Equatable {
+enum AuthenticationState: Equatable {
     case authenticated(String)
     case unauthenticated
 }
